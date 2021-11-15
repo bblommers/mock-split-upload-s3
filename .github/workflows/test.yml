@@ -4,32 +4,6 @@ on: [push]
 
 jobs:
 
-  test:
-    name: Unit test
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [3.9]
-
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Update pip
-      run: |
-        python -m pip install --upgrade pip
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-    - name: Test with pytest
-      run: |
-        pytest -sv test.py
-
 
   testserver:
     name: Server test
@@ -52,12 +26,6 @@ jobs:
         python -m pip install --upgrade pip
     - name: Install dependencies
       run: |
-        mkdir ~/.aws
-        touch ~/.aws/credentials
-        set AWS_ACCESS_KEY_ID='testing'
-        set AWS_SECRET_ACCESS_KEY='testing'
-        set AWS_SECURITY_TOKEN='testing'
-        set AWS_SESSION_TOKEN='testing'
         pip install moto[server,all]
         pip install -r requirements.txt
         moto_server -H 0.0.0.0 &
