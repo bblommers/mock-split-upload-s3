@@ -52,6 +52,12 @@ jobs:
         python -m pip install --upgrade pip
     - name: Install dependencies
       run: |
+        mkdir ~/.aws
+        touch ~/.aws/credentials
+        set AWS_ACCESS_KEY_ID='testing'
+        set AWS_SECRET_ACCESS_KEY='testing'
+        set AWS_SECURITY_TOKEN='testing'
+        set AWS_SESSION_TOKEN='testing'
         pip install moto[server,all]
         pip install -r requirements.txt
         moto_server -H 0.0.0.0 &
@@ -59,4 +65,4 @@ jobs:
         python -c "from time import sleep; sleep(5)"
     - name: Test with pytest
       run: |
-        pytest -sv testserver.py
+        AWS_SECRET_ACCESS_KEY=server_secret AWS_ACCESS_KEY_ID=server_key pytest -sv testserver.py
