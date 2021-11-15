@@ -1,0 +1,4 @@
+s3_upload_split
+moto
+boto3
+pytest
